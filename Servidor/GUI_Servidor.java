@@ -7,13 +7,16 @@ public class GUI_Servidor extends JFrame{
     private javax.swing.JButton btnFuncion1;
     private javax.swing.JButton btnAudios;
     private javax.swing.JButton btnImagenes;
-    private javax.swing.JButton btnVideos;
+    private javax.swing.JButton btnJuegos;
+    private javax.swing.JButton btnDibujar;
+    private javax.swing.JButton btnArchivos;
 
 
 
 public GUI_Servidor(){
     setLocationRelativeTo(null);
 initComponents();
+
 
 
 }
@@ -31,6 +34,12 @@ initComponents();
         btnAudios.setText("Audios");
         btnImagenes = new javax.swing.JButton();
         btnImagenes.setText("Envío Imagenes");
+        btnJuegos = new javax.swing.JButton();
+        btnJuegos.setText("Juego");
+        btnDibujar = new javax.swing.JButton();
+        btnDibujar.setText("Dibujar");
+        btnArchivos = new javax.swing.JButton();
+        btnArchivos.setText("Recibir Files");
 
 
  //ACÁ INICIAMOS CONFIGURANDO EL FRAME
@@ -59,25 +68,37 @@ initComponents();
         PanelPrincipalLayout.setHorizontalGroup(
             PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelPrincipalLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnImagenes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnAudios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFuncion1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)))
-                .addContainerGap(257, Short.MAX_VALUE))
+            .addGap(26, 26, 26)
+            .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(btnJuegos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnImagenes, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addComponent(btnAudios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnFuncion1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+            .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(btnDibujar, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(btnArchivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(28, 28, 28))
             
         );
         PanelPrincipalLayout.setVerticalGroup(
             PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelPrincipalLayout.createSequentialGroup()
                 .addGap(59, 59, 59)
-                .addComponent(btnFuncion1)
-                .addGap(30, 30, 30)
-                .addComponent(btnAudios)
+                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(PanelPrincipalLayout.createSequentialGroup()
+                        .addComponent(btnFuncion1)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnAudios))
+                    .addComponent(btnDibujar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
-                .addComponent(btnImagenes)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(PanelPrincipalLayout.createSequentialGroup()
+                        .addComponent(btnImagenes)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnJuegos))
+                    .addComponent(btnArchivos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         pack(); // Ajustar el tamaño de la ventana para que se ajuste al contenido
