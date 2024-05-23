@@ -74,8 +74,8 @@ public class AudioCliente extends JFrame {
         Grabador = false;
     }
 
-    private void EnvioAudio(String host, int port) {
-        try (Socket socket = new Socket(host, port);
+    private void EnvioAudio(String SERVER_ADDRESS, int SERVER_PORT) {
+        try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
             oos.writeObject(out.toByteArray());
         } catch (IOException e) {

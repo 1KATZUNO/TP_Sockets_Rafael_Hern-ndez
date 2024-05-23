@@ -1,7 +1,7 @@
 package Cliente;
 
 import javax.swing.JFrame;
-
+import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
 public class GUI_Cliente extends JFrame{
@@ -29,6 +29,8 @@ initComponents();
 // igual al de netbeans, para no olvidar su función
     private void initComponents(){
         // se le pone por defecto el exit and close(pa abrir y cerrar)
+
+        // to esto son los nombres de los botones y el label
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         PanelPrincipal = new javax.swing.JPanel();
         btnFuncion1 = new javax.swing.JButton();
@@ -45,7 +47,39 @@ initComponents();
         btnArchivos.setText("Recibir Files");
         lbBienvenute = new javax.swing.JLabel();
         lbBienvenute.setText("Bienvenido Cliente");
-// to esto son los nombres de los botones y el label
+
+
+// to esto es para la funcion de los botones
+        btnFuncion1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFuncion1ActionPerformed(evt);
+            }
+        });
+        btnAudios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAudiosActionPerformed(evt);
+            }
+        });
+        btnImagenes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImagenesActionPerformed(evt);
+            }
+        });
+        btnJuegos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJuegosActionPerformed(evt);
+            }
+        });
+        btnDibujar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDibujarActionPerformed(evt);
+            }
+        });
+        btnArchivos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArchivosActionPerformed(evt);
+            }
+        });
 
  //ACÁ INICIAMOS CONFIGURANDO EL FRAME
 
@@ -116,7 +150,42 @@ initComponents();
     }
 
 
-
+    private void btnFuncion1ActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
+    private void btnAudiosActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
+    private void btnImagenesActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
+    private void btnJuegosActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
+    private void btnDibujarActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
+    private void btnArchivosActionPerformed(java.awt.event.ActionEvent evt) {  
+        JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+        ChatCliente chat = new ChatCliente();
+        chat.setVisible(true);
+        dispose();
+    } 
 
     public static void main(String[] args) {
    
