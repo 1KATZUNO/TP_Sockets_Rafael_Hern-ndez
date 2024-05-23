@@ -16,10 +16,13 @@ public class AudioCliente extends JFrame {
 
     public AudioCliente() {
         setTitle("Cliente de Audio");
-        setSize(300, 100);
+        setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
         JButton recordButton = new JButton("Grabar");
         JButton stopButton = new JButton("Detener");
+        JButton regresarButton = new JButton("Regresar");
 
         recordButton.addActionListener(new ActionListener() {
             @Override
@@ -36,9 +39,16 @@ public class AudioCliente extends JFrame {
             }
         });
 
+        regresarButton.addActionListener(e -> {
+            GUI_Cliente g = new GUI_Cliente();
+         g.setVisible(true);
+         dispose();
+        });
+
         JPanel panel = new JPanel();
         panel.add(recordButton);
         panel.add(stopButton);
+        panel.add(regresarButton);
         add(panel);
 
         setVisible(true);
@@ -76,7 +86,7 @@ public class AudioCliente extends JFrame {
 
     private void EnvioAudio(String SERVER_ADDRESS, int SERVER_PORT) {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
             oos.writeObject(out.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,3 +97,4 @@ public class AudioCliente extends JFrame {
         SwingUtilities.invokeLater(AudioCliente::new);
     }
 }
+

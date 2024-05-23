@@ -3,18 +3,19 @@ package Servidor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.List;
 
 public class ArchivoServidor extends JFrame {
     private JTextArea textArea;
+    private JButton btnRegresar;
 
     public ArchivoServidor() {
         setTitle("File Transfer Server");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 200);
+        setSize(400, 250);
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -24,8 +25,17 @@ public class ArchivoServidor extends JFrame {
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
 
+        btnRegresar = new JButton("Regresar");
+        btnRegresar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+         GUI_Servidor g = new GUI_Servidor();
+         g.setVisible(true);
+         dispose();
+        });
+
         panel.add(lbArrastra, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(btnRegresar, BorderLayout.SOUTH);
 
         getContentPane().add(panel);
 
@@ -103,3 +113,4 @@ public class ArchivoServidor extends JFrame {
         SwingUtilities.invokeLater(() -> new ArchivoServidor().setVisible(true));
     }
 }
+

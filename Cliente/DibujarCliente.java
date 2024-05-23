@@ -14,10 +14,22 @@ public class DibujarCliente extends JFrame {
         setTitle("Dibujo Cliente");
         AreaDibujo = new DibujoArea();
         add(AreaDibujo, BorderLayout.CENTER);
+        setLocationRelativeTo(null);
 
+        JPanel panel = new JPanel();
         JButton borrarButton = new JButton("Borrar Todo");
         borrarButton.addActionListener(e -> out.println("BORRAR"));
-        add(borrarButton, BorderLayout.SOUTH);
+        panel.add(borrarButton);
+
+        JButton regresarButton = new JButton("Regresar");
+        regresarButton.addActionListener(e -> {
+            GUI_Cliente g = new GUI_Cliente();
+         g.setVisible(true);
+         dispose();
+        });
+        panel.add(regresarButton);
+
+        add(panel, BorderLayout.SOUTH);
 
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

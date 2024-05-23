@@ -11,13 +11,15 @@ import java.net.Socket;
 public class AudioServidor extends JFrame {
 
     private JButton BotonPlay;
+    private JButton BotonRegresar;
     private boolean AudioRecibir;
     private byte[] RecibirAudioData;
 
     public AudioServidor() {
         setTitle("Servidor de Audio");
-        setSize(300, 100);
+        setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         BotonPlay = new JButton("Reproducir");
         BotonPlay.setEnabled(false);
@@ -28,7 +30,19 @@ public class AudioServidor extends JFrame {
             }
         });
 
-        add(BotonPlay);
+        BotonRegresar = new JButton("Regresar");
+        BotonRegresar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+            GUI_Servidor g = new GUI_Servidor();
+            g.setVisible(true);
+            dispose();
+        });
+
+        JPanel panel = new JPanel();
+        panel.add(BotonPlay);
+        panel.add(BotonRegresar);
+        add(panel);
+
         setVisible(true);
 
         new Thread(() -> {
@@ -48,7 +62,7 @@ public class AudioServidor extends JFrame {
             }
         }).start();
     }
-// JOptionPane
+
     private void playAudio() {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(RecibirAudioData)) {
             AudioFormat format = new AudioFormat(44100, 16, 2, true, true);
@@ -74,4 +88,5 @@ public class AudioServidor extends JFrame {
         SwingUtilities.invokeLater(AudioServidor::new);
     }
 }
+
 //192.168.100.7

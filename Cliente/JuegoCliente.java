@@ -17,6 +17,7 @@ public class JuegoCliente extends JFrame {
         setTitle("Tic Tac Toe - Client");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(3, 3));
+        setLocationRelativeTo(null);
 
         try {
             Socket socket = new Socket("localhost", 12348);
@@ -28,6 +29,14 @@ public class JuegoCliente extends JFrame {
             ReiniciarJuego();
 
             new Thread(new IncomingReader()).start(); // Thread para leer mensajes del servidor
+
+            JButton regresarButton = new JButton("Regresar");
+            regresarButton.addActionListener(e -> {
+                GUI_Cliente g = new GUI_Cliente();
+         g.setVisible(true);
+         dispose();
+            });
+            add(regresarButton, BorderLayout.SOUTH);
 
             pack();
             setVisible(true);
@@ -123,3 +132,4 @@ public class JuegoCliente extends JFrame {
         SwingUtilities.invokeLater(JuegoCliente::new);
     }
 }
+

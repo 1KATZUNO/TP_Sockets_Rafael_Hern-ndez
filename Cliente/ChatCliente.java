@@ -25,7 +25,9 @@ public class ChatCliente extends JFrame {
         JButton btnRegresar = new JButton("Regresar");
         btnRegresar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Agrega aquí la función que desees cuando se presione el botón "Regresar"
+                GUI_Cliente g = new GUI_Cliente();
+                g.setVisible(true);
+                dispose();
             }
         });
         JPanel panelBtnRegresar = new JPanel();

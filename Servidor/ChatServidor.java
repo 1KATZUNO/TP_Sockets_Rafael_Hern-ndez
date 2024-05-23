@@ -26,7 +26,10 @@ public class ChatServidor extends JFrame {
         JButton btnRegresar = new JButton("Regresar");
         btnRegresar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               // acá hacemos el regresarrr
+                JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+            GUI_Servidor g = new GUI_Servidor();
+            g.setVisible(true);
+            dispose();
             }
         });
         JPanel panelBtnRegresar = new JPanel();
@@ -130,6 +133,7 @@ public class ChatServidor extends JFrame {
         SwingUtilities.invokeLater(() -> {
             ChatServidor server = new ChatServidor();
             server.setVisible(true);
+            
         });
     }
 }

@@ -1,66 +1,82 @@
 package Cliente;
 
 import javax.swing.*;
+
+import Servidor.GUI_Servidor;
+
 import java.awt.*;
 import java.awt.datatransfer.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.List;
 
-public class ArchivoCliente extends JFrame{
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Transferencia de Archivos");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+public class ArchivoCliente extends JFrame {
+    private JTextArea txtArchivos;
+    private JButton btnRegresar;
+
+    public ArchivoCliente() {
+        setTitle("Transferencia de Archivos");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 250);
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
         JLabel lbArrastra = new JLabel("Arrastra y suelta archivos aquí:");
-        JTextArea txtArchivos = new JTextArea();
+        txtArchivos = new JTextArea();
         txtArchivos.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(txtArchivos);
 
+        btnRegresar = new JButton("Regresar");
+        btnRegresar.addActionListener(e -> {
+         GUI_Cliente g = new GUI_Cliente();
+         g.setVisible(true);
+         dispose();
+        });
+
         panel.add(lbArrastra, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(btnRegresar, BorderLayout.SOUTH);
 
-        frame.getContentPane().add(panel);
-
-        frame.setVisible(true);
+        getContentPane().add(panel);
 
         panel.setTransferHandler(new TransferHandler() {
             @Override
             public boolean canImport(TransferSupport support) {
-                return true;
+                return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
             }
 
             @Override
             public boolean importData(TransferSupport support) {
+                if (!canImport(support)) {
+                    return false;
+                }
+
+                Transferable transferable = support.getTransferable();
                 try {
-                    Transferable transferable = support.getTransferable();
-                    if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                        java.util.List<File> fileList = (java.util.List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-                        for (File file : fileList) {
-                            txtArchivos.append("Enviando archivo: " + file.getName() + "\n");
-                            EnviarArchivo(file);
-                        }
-                        return true;
+                    List<File> fileList = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    for (File file : fileList) {
+                        txtArchivos.append("Enviando archivo: " + file.getName() + "\n");
+                        EnviarArchivo(file);
                     }
+                    return true;
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    return false;
                 }
-                return false;
             }
         });
+
+        setVisible(true);
     }
 
-    private static void EnviarArchivo(File file) {
+    private void EnviarArchivo(File file) {
         try (Socket socket = new Socket("localhost", 12350);
              OutputStream outputStream = socket.getOutputStream();
              FileInputStream fileInputStream = new FileInputStream(file);
              BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-             PrintWriter writer = new PrintWriter(outputStream, true);
-        ) {
+             PrintWriter writer = new PrintWriter(outputStream, true)) {
             byte[] buffer = new byte[8192];
             int bytesRead;
             while ((bytesRead = bufferedInputStream.read(buffer)) != -1) {
@@ -72,4 +88,10 @@ public class ArchivoCliente extends JFrame{
             JOptionPane.showMessageDialog(null, "Error enviando archivo al servidor.");
         }
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ArchivoCliente());
+    }
 }
+
+

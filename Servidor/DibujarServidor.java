@@ -15,13 +15,26 @@ public class DibujarServidor extends JFrame {
         setTitle("Dibujo Servidor");
         AreaDibujo = new DibujoArea();
         add(AreaDibujo, BorderLayout.CENTER);
+        setLocationRelativeTo(null);
 
+        JPanel panel = new JPanel();
         JButton clearButton = new JButton("Borrar Todo");
         clearButton.addActionListener(e -> {
             AreaDibujo.Limpiar();
             broadcast("BORRAR");
         });
-        add(clearButton, BorderLayout.SOUTH);
+        panel.add(clearButton);
+
+        JButton regresarButton = new JButton("Regresar");
+        regresarButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+            GUI_Servidor g = new GUI_Servidor();
+            g.setVisible(true);
+            dispose();
+        });
+        panel.add(regresarButton);
+
+        add(panel, BorderLayout.SOUTH);
 
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,4 +164,5 @@ public class DibujarServidor extends JFrame {
         SwingUtilities.invokeLater(DibujarServidor::new);
     }
 }
+
 

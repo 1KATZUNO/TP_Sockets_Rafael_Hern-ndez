@@ -15,15 +15,22 @@ public class ImagenCliente extends JFrame {
     private static final int SERVER_PORT = 12347;
 
     public ImagenCliente() {
-        conectarServidor();
-
         setTitle("Image Client");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         JLabel lbArrastrar = new JLabel("Drag and drop an image here", SwingConstants.CENTER);
         lbArrastrar.setFont(new Font("Serif", Font.BOLD, 20));
         add(lbArrastrar, BorderLayout.CENTER);
+
+        JButton regresarButton = new JButton("Regresar");
+        regresarButton.addActionListener(e -> {
+            GUI_Cliente g = new GUI_Cliente();
+            g.setVisible(true);
+            dispose();
+        });
+        add(regresarButton, BorderLayout.SOUTH);
 
         new DropTarget(lbArrastrar, new DropTargetListener() {
             @Override
@@ -114,6 +121,7 @@ public class ImagenCliente extends JFrame {
         new ImagenCliente();
     }
 }
+
 
 
 

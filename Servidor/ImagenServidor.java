@@ -12,10 +12,20 @@ public class ImagenServidor extends JFrame {
         setTitle("Image Server");
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         JLabel lbImagen = new JLabel();
         add(new JScrollPane(lbImagen));
         setVisible(true);
+
+        JButton regresarButton = new JButton("Regresar");
+        regresarButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+            GUI_Servidor g = new GUI_Servidor();
+            g.setVisible(true);
+            dispose();
+        });
+        add(regresarButton, BorderLayout.SOUTH);
 
         try (ServerSocket serverSocket = new ServerSocket(12347)) {
             System.out.println("Servidor escuchando en puerto 12347");
@@ -33,7 +43,7 @@ public class ImagenServidor extends JFrame {
                             BufferedImage image = ImageIO.read(bais);
                             if (image != null) {
                                 lbImagen.setIcon(new ImageIcon(image));
-                                pack(); // Adjust the frame size to fit the new image
+                                pack();
                             }
                         }
                     } catch (IOException e) {
