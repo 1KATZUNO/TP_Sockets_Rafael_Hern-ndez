@@ -21,7 +21,7 @@ public class JuegoServidor extends JFrame {
         setLayout(new GridLayout(3, 3));
 
         try {
-            ServerSocket serverSocket = new ServerSocket(5000);
+            ServerSocket serverSocket = new ServerSocket(12348);
             System.out.println("Servidor Iniciado. Esperando cliente...");
 
             Socket clientSocket = serverSocket.accept();

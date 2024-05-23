@@ -19,7 +19,7 @@ public class JuegoCliente extends JFrame {
         setLayout(new GridLayout(3, 3));
 
         try {
-            Socket socket = new Socket("localhost", 5000);
+            Socket socket = new Socket("localhost", 12348);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 

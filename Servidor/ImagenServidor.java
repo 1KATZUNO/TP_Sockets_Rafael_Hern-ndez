@@ -17,8 +17,8 @@ public class ImagenServidor extends JFrame {
         add(new JScrollPane(lbImagen));
         setVisible(true);
 
-        try (ServerSocket serverSocket = new ServerSocket(8000)) {
-            System.out.println("Server is listening on port 8000");
+        try (ServerSocket serverSocket = new ServerSocket(12347)) {
+            System.out.println("Servidor escuchando en puerto 12347");
 
             while (true) {
                 Socket socket = serverSocket.accept();

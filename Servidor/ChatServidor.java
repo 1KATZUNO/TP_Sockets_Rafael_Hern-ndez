@@ -94,7 +94,7 @@ public class ChatServidor extends JFrame {
         }
 
         public void run() {
-            // cmo corre todo
+            // cmo corre
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);

@@ -12,7 +12,7 @@ import java.awt.image.*;
 public class ImagenCliente extends JFrame {
     private Socket socket;
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 8000;
+    private static final int SERVER_PORT = 12347;
 
     public ImagenCliente() {
         conectarServidor();

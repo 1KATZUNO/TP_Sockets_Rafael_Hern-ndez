@@ -32,7 +32,7 @@ public class AudioCliente extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PararGrabar();
-                EnvioAudio("192.168.100.7", 5000); // Acordarse de poner otros puerts
+                EnvioAudio("localhost", 12346); // Acordarse de poner otros puerts
             }
         });
 

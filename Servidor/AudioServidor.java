@@ -32,7 +32,7 @@ public class AudioServidor extends JFrame {
         setVisible(true);
 
         new Thread(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(5000)) {
+            try (ServerSocket serverSocket = new ServerSocket(12346)) {
                 while (true) {
                     try (Socket socket = serverSocket.accept();
                          ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {

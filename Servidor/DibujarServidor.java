@@ -7,50 +7,54 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class DibujarServidor extends JFrame{
+public class DibujarServidor extends JFrame {
     private static Set<PrintWriter> clientWriters = new HashSet<>();
-    private static JFrame frame;
-    private static DibujoArea AreaDibujo;
+    private DibujoArea AreaDibujo;
 
-    public static void main(String[] args) throws IOException {
-        frame = new JFrame("Dibujo Servidor");
+    public DibujarServidor() {
+        setTitle("Dibujo Servidor");
         AreaDibujo = new DibujoArea();
-        frame.add(AreaDibujo, BorderLayout.CENTER);
-        
+        add(AreaDibujo, BorderLayout.CENTER);
+
         JButton clearButton = new JButton("Borrar Todo");
         clearButton.addActionListener(e -> {
             AreaDibujo.Limpiar();
-            broadcast("Borrar");
+            broadcast("BORRAR");
         });
-        frame.add(clearButton, BorderLayout.SOUTH);
+        add(clearButton, BorderLayout.SOUTH);
 
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
 
-        ServerSocket serverSocket = new ServerSocket(9000);
-        System.out.println("Servidor escuchando en puerto 9000");
+        new Thread(() -> {
+            try (ServerSocket serverSocket = new ServerSocket(12349)) {
+                System.out.println("Servidor escuchando en puerto 12349");
 
-        while (true) {
-            Socket socket = serverSocket.accept();
-            new Thread(new MenejadorCliente(socket)).start();
-        }
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    new Thread(new ManejadorCliente(socket)).start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
-    private static void broadcast(String Mensaje) {
+    private void broadcast(String mensaje) {
         synchronized (clientWriters) {
             for (PrintWriter writer : clientWriters) {
-                writer.println(Mensaje);
+                writer.println(mensaje);
             }
         }
     }
 
-    private static class MenejadorCliente implements Runnable {
+    private class ManejadorCliente implements Runnable {
         private Socket socket;
         private PrintWriter out;
         private BufferedReader in;
 
-        public MenejadorCliente(Socket socket) {
+        public ManejadorCliente(Socket socket) {
             this.socket = socket;
         }
 
@@ -64,17 +68,13 @@ public class DibujarServidor extends JFrame{
                     clientWriters.add(out);
                 }
 
-                String Mensajee;
-                while ((Mensajee = in.readLine()) != null) {
-                    if (Mensajee.equals("CLEAR")) {
+                String mensaje;
+                while ((mensaje = in.readLine()) != null) {
+                    if (mensaje.equals("BORRAR")) {
                         AreaDibujo.Limpiar();
                     } else {
-                        synchronized (clientWriters) {
-                            for (PrintWriter writer : clientWriters) {
-                                writer.println(Mensajee);
-                            }
-                        }
-                        ProcesoMensaje(Mensajee);
+                        broadcast(mensaje);
+                        procesarMensaje(mensaje);
                     }
                 }
             } catch (IOException e) {
@@ -91,8 +91,8 @@ public class DibujarServidor extends JFrame{
             }
         }
 
-        private void ProcesoMensaje(String Mensaje) {
-            String[] parts = Mensaje.split(",");
+        private void procesarMensaje(String mensaje) {
+            String[] parts = mensaje.split(",");
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
             int x2 = Integer.parseInt(parts[2]);
@@ -102,8 +102,8 @@ public class DibujarServidor extends JFrame{
         }
     }
 
-    static class DibujoArea extends JPanel {
-        private int x, y, x2, y2;
+    private class DibujoArea extends JPanel {
+        private int x, y;
 
         public DibujoArea() {
             setDoubleBuffered(false);
@@ -119,15 +119,11 @@ public class DibujarServidor extends JFrame{
             addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    x2 = e.getX();
-                    y2 = e.getY();
+                    int x2 = e.getX();
+                    int y2 = e.getY();
                     LineaDibujo(x, y, x2, y2, Color.RED);
                     String message = x + "," + y + "," + x2 + "," + y2 + "," + Color.RED.getRGB();
-                    synchronized (clientWriters) {
-                        for (PrintWriter writer : clientWriters) {
-                            writer.println(message);
-                        }
-                    }
+                    broadcast(message);
                     x = x2;
                     y = y2;
                 }
@@ -150,4 +146,9 @@ public class DibujarServidor extends JFrame{
             super.paintComponent(g);
         }
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(DibujarServidor::new);
+    }
 }
+

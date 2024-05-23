@@ -150,37 +150,37 @@ private void initComponents(){
 
 // estos son los botones, las acciones de ellos
 private void btnFuncion1ActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     ChatServidor chat = new ChatServidor();
     chat.setVisible(true);
     dispose();
 } 
 private void btnAudiosActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     AudioServidor audio = new AudioServidor();
     audio.setVisible(true);
     dispose();
 } 
 private void btnImagenesActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     ImagenServidor imagen = new ImagenServidor();
     imagen.setVisible(true);
     dispose();
 } 
 private void btnJuegosActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     JuegoServidor juego = new JuegoServidor();
     juego.setVisible(true);
     dispose();
 } 
 private void btnDibujarActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     DibujarServidor dibujo = new DibujarServidor();
     dibujo.setVisible(true);
     dispose();
 } 
 private void btnArchivosActionPerformed(java.awt.event.ActionEvent evt) {  
-    JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
+                                              
     ArchivoServidor archivo = new ArchivoServidor();
     archivo.setVisible(true);
     dispose();
