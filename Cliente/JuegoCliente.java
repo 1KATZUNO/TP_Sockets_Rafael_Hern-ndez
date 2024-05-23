@@ -1,10 +1,15 @@
 package Cliente;
 
 import javax.swing.*;
+
+import Servidor.GUI_Servidor;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class JuegoCliente extends JFrame {
     private JButton[][] Botones = new JButton[3][3];
@@ -15,7 +20,16 @@ public class JuegoCliente extends JFrame {
 
     public JuegoCliente() {
         setTitle("Tic Tac Toe - Client");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // Cambio en la operación de cierre
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Muestra la ventana del servidor y cierra la actual
+                GUI_Cliente g = new GUI_Cliente();
+                g.setVisible(true);
+                dispose();
+            }
+        });
         setLayout(new GridLayout(3, 3));
         setLocationRelativeTo(null);
 
@@ -29,14 +43,6 @@ public class JuegoCliente extends JFrame {
             ReiniciarJuego();
 
             new Thread(new IncomingReader()).start(); // Thread para leer mensajes del servidor
-
-            JButton regresarButton = new JButton("Regresar");
-            regresarButton.addActionListener(e -> {
-                GUI_Cliente g = new GUI_Cliente();
-         g.setVisible(true);
-         dispose();
-            });
-            add(regresarButton, BorderLayout.SOUTH);
 
             pack();
             setVisible(true);

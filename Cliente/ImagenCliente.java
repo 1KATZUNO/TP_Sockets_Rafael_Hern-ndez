@@ -8,6 +8,8 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import javax.imageio.*;
 import java.awt.image.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ImagenCliente extends JFrame {
     private Socket socket;
@@ -17,7 +19,15 @@ public class ImagenCliente extends JFrame {
     public ImagenCliente() {
         setTitle("Image Client");
         setSize(400, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                GUI_Cliente g = new GUI_Cliente();
+                g.setVisible(true);
+                dispose();
+            }
+        });
         setLocationRelativeTo(null);
 
         JLabel lbArrastrar = new JLabel("Drag and drop an image here", SwingConstants.CENTER);
@@ -58,7 +68,7 @@ public class ImagenCliente extends JFrame {
                             if (!files.isEmpty()) {
                                 File file = files.get(0);
                                 if (ImagenFile(file)) {
-                                    EnviarImagen_Servidor(file);
+                                    EnviarImagenServidor(file);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Please drop an image file");
                                 }
@@ -85,7 +95,7 @@ public class ImagenCliente extends JFrame {
         return false;
     }
 
-    private void EnviarImagen_Servidor(File file) {
+    private void EnviarImagenServidor(File file) {
         try {
             if (socket == null || socket.isClosed()) {
                 conectarServidor();
@@ -121,6 +131,7 @@ public class ImagenCliente extends JFrame {
         new ImagenCliente();
     }
 }
+
 
 
 

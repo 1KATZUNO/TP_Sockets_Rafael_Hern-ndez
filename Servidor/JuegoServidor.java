@@ -6,6 +6,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class JuegoServidor extends JFrame {
     private JButton[][] Botones = new JButton[3][3];
@@ -17,7 +19,16 @@ public class JuegoServidor extends JFrame {
 
     public JuegoServidor() {
         setTitle("Tic Tac Toe - Server");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // Cambio en la operación de cierre
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Muestra la ventana del servidor y cierra la actual
+                GUI_Servidor g = new GUI_Servidor();
+                g.setVisible(true);
+                dispose();
+            }
+        });
         setLayout(new GridLayout(3, 3));
         setLocationRelativeTo(null);
 
@@ -34,15 +45,6 @@ public class JuegoServidor extends JFrame {
             ListaBotones();
 
             new Thread(new IncomingReader()).start(); // Thread para leer mensajes del cliente
-
-            JButton regresarButton = new JButton("Regresar");
-            regresarButton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
-                GUI_Servidor g = new GUI_Servidor();
-                g.setVisible(true);
-                dispose();
-            });
-            add(regresarButton, BorderLayout.SOUTH);
 
             pack();
             setVisible(true);
@@ -84,28 +86,27 @@ public class JuegoServidor extends JFrame {
             }
         }
     }
-
-    private void RevisarEmpate() {
-        // Verificar si todos los botones están seleccionados, en cuyo caso hay un empate
-        boolean BotonesSeleccionados = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (!BotonSelecionado[i][j]) {
-                    BotonesSeleccionados = false;
-                    break;
-                }
-            }
-            if (!BotonesSeleccionados) {
+private void RevisarEmpate() {
+    // Verificar si todos los botones están seleccionados, en cuyo caso hay un empate
+    boolean BotonesSeleccionados = true;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (!BotonSelecionado[i][j]) {
+                BotonesSeleccionados = false;
                 break;
             }
         }
-        if (BotonesSeleccionados && !GanadorJuego) {
-            AnunciarGanador("Empate");
+        if (!BotonesSeleccionados) {
+            break;
         }
     }
+    if (BotonesSeleccionados && !GanadorJuego) {
+        AnunciarGanador("Empate");
+    }
+}
 
     private void Ganador() {
-       // Verificar si hay un ganador en filas
+    // Verificar si hay un ganador en filas
     
     
     
@@ -206,8 +207,8 @@ public class JuegoServidor extends JFrame {
     if (BotonesSeleccionados) {
         AnunciarGanador("Empate");
     }
-    }
 
+}
     private void AnunciarGanador(String winner) {
         if (winner.equals("Empate")) {
             JOptionPane.showMessageDialog(this, "Empate");
@@ -243,27 +244,26 @@ public class JuegoServidor extends JFrame {
         SwingUtilities.invokeLater(JuegoServidor::new);
     }
 
-    public class IncomingReader implements Runnable {
-        public void run() {
-            try {
-                String input;
-                while ((input = in.readLine()) != null) {
-                    String[] tokens = input.split(" ");
-                    if (tokens.length == 1 && tokens[0].equals("Cliente")) {
-                        AnunciarGanador("Cliente");
-                        return;
-                    } else {
-                        int row = Integer.parseInt(tokens[0]);
-                        int col = Integer.parseInt(tokens[1]);
-                        ColorBotonActualizar(row, col, Color.BLUE); // Actualizar botón recibido del cliente
-                        RevisarEmpate();
-                        setTurnoCliente(true); // Cambiar turno al cliente
-                    }
+public class IncomingReader implements Runnable {
+    public void run() {
+        try {
+            String input;
+            while ((input = in.readLine()) != null) {
+                String[] tokens = input.split(" ");
+                if (tokens.length == 1 && tokens[0].equals("Cliente")) {
+                    AnunciarGanador("Cliente");
+                    return;
+                } else {
+                    int row = Integer.parseInt(tokens[0]);
+                    int col = Integer.parseInt(tokens[1]);
+                    ColorBotonActualizar(row, col, Color.BLUE); // Actualizar botón recibido del cliente
+                    RevisarEmpate();
+                    setTurnoCliente(true); // Cambiar turno al cliente
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
+    }
+}
