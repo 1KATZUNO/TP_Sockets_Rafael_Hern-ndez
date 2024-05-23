@@ -163,8 +163,8 @@ private void btnAudiosActionPerformed(java.awt.event.ActionEvent evt) {
 } 
 private void btnImagenesActionPerformed(java.awt.event.ActionEvent evt) {  
                                               
-    ImagenServidor imagen = new ImagenServidor();
-    imagen.setVisible(true);
+    ImagenServidor servidor = new ImagenServidor();
+    servidor.iniciarServidor();
     dispose();
 } 
 private void btnJuegosActionPerformed(java.awt.event.ActionEvent evt) {  

@@ -23,8 +23,6 @@ public class ImagenCliente extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                GUI_Cliente g = new GUI_Cliente();
-                g.setVisible(true);
                 dispose();
             }
         });
@@ -36,9 +34,9 @@ public class ImagenCliente extends JFrame {
 
         JButton regresarButton = new JButton("Regresar");
         regresarButton.addActionListener(e -> {
-            GUI_Cliente g = new GUI_Cliente();
-            g.setVisible(true);
-            dispose();
+           GUI_Cliente g = new GUI_Cliente();
+           g.setVisible(true);
+           dispose();
         });
         add(regresarButton, BorderLayout.SOUTH);
 
@@ -131,6 +129,7 @@ public class ImagenCliente extends JFrame {
         new ImagenCliente();
     }
 }
+
 
 
 
