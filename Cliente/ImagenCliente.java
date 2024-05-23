@@ -6,15 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.awt.event.*;
 import javax.imageio.*;
 import java.awt.image.*;
 
 public class ImagenCliente extends JFrame {
     private Socket socket;
+    private static final String SERVER_ADDRESS = "localhost";
+    private static final int SERVER_PORT = 8000;
 
-    public ImagenCliente(String SERVER_ADDRESS, int SERVER_PORT) throws IOException {
-        socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+    public ImagenCliente() {
+        conectarServidor();
+
         setTitle("Image Client");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,22 +27,19 @@ public class ImagenCliente extends JFrame {
 
         new DropTarget(lbArrastrar, new DropTargetListener() {
             @Override
-            public void dragEnter(DropTargetDragEvent dtde) {
-            }
+            public void dragEnter(DropTargetDragEvent dtde) {}
 
             @Override
-            public void dragOver(DropTargetDragEvent dtde) {
-            }
+            public void dragOver(DropTargetDragEvent dtde) {}
 
             @Override
-            public void dropActionChanged(DropTargetDragEvent dtde) {
-            }
+            public void dropActionChanged(DropTargetDragEvent dtde) {}
 
             @Override
-            public void dragExit(DropTargetEvent dte) {
-            }
+            public void dragExit(DropTargetEvent dte) {}
 
             @Override
+            @SuppressWarnings("unchecked")
             public void drop(DropTargetDropEvent dtde) {
                 try {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
@@ -53,7 +52,6 @@ public class ImagenCliente extends JFrame {
                                 File file = files.get(0);
                                 if (ImagenFile(file)) {
                                     EnviarImagen_Servidor(file);
-                                    DisplayImagen(file); // Display the image locally
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Please drop an image file");
                                 }
@@ -69,9 +67,9 @@ public class ImagenCliente extends JFrame {
         setVisible(true);
     }
 
-    private boolean ImagenFile(File Archivo) {
+    private boolean ImagenFile(File archivo) {
         String[] imageExtensions = new String[] { "jpg", "jpeg", "png", "gif", "bmp" };
-        String fileName = Archivo.getName().toLowerCase();
+        String fileName = archivo.getName().toLowerCase();
         for (String ext : imageExtensions) {
             if (fileName.endsWith(ext)) {
                 return true;
@@ -82,6 +80,10 @@ public class ImagenCliente extends JFrame {
 
     private void EnviarImagen_Servidor(File file) {
         try {
+            if (socket == null || socket.isClosed()) {
+                conectarServidor();
+            }
+            
             BufferedImage image = ImageIO.read(file);
             if (image != null) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,29 +101,19 @@ public class ImagenCliente extends JFrame {
         }
     }
 
-    private void DisplayImagen(File file) {
+    private void conectarServidor() {
         try {
-            BufferedImage image = ImageIO.read(file);
-            if (image != null) {
-                JLabel imageLabel = new JLabel(new ImageIcon(image));
-                JFrame imageFrame = new JFrame("Local Image Preview");
-                imageFrame.add(new JScrollPane(imageLabel));
-                imageFrame.setSize(500, 500);
-                imageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                imageFrame.setVisible(true);
-            }
+            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "No se puede conectar al servidor. Asegúrese de que el servidor está ejecutándose.", "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
     }
 
     public static void main(String[] args) {
-        String serverAddress = "localhost";
-        int serverPort = 8000;
-        try {
-            new ImagenCliente(serverAddress, serverPort);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new ImagenCliente();
     }
 }
+
+
+

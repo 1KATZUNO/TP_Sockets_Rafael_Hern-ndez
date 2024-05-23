@@ -45,7 +45,7 @@ private void initComponents(){
     btnArchivos = new javax.swing.JButton();
     btnArchivos.setText("Recibir Files");
     lbBienvenute = new javax.swing.JLabel();
-    lbBienvenute.setText("Bienvenido Cliente");
+    lbBienvenute.setText("Bienvenido a Servidor");
 
 
 // to esto es para la funcion de los botones
@@ -148,7 +148,7 @@ private void initComponents(){
     pack(); // Ajustar el tamaño de la ventana para que se ajuste al contenido
 }
 
-
+// estos son los botones, las acciones de ellos
 private void btnFuncion1ActionPerformed(java.awt.event.ActionEvent evt) {  
     JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
     ChatServidor chat = new ChatServidor();
@@ -169,20 +169,20 @@ private void btnImagenesActionPerformed(java.awt.event.ActionEvent evt) {
 } 
 private void btnJuegosActionPerformed(java.awt.event.ActionEvent evt) {  
     JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-    ChatServidor chat = new ChatServidor();
-    chat.setVisible(true);
+    JuegoServidor juego = new JuegoServidor();
+    juego.setVisible(true);
     dispose();
 } 
 private void btnDibujarActionPerformed(java.awt.event.ActionEvent evt) {  
     JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-    ChatServidor chat = new ChatServidor();
-    chat.setVisible(true);
+    DibujarServidor dibujo = new DibujarServidor();
+    dibujo.setVisible(true);
     dispose();
 } 
 private void btnArchivosActionPerformed(java.awt.event.ActionEvent evt) {  
     JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-    ChatServidor chat = new ChatServidor();
-    chat.setVisible(true);
+    ArchivoServidor archivo = new ArchivoServidor();
+    archivo.setVisible(true);
     dispose();
 } 
 

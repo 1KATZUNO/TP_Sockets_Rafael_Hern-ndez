@@ -7,14 +7,15 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
-public class ImagenServidor extends JFrame{
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Image Server");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+public class ImagenServidor extends JFrame {
+    public ImagenServidor() {
+        setTitle("Image Server");
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         JLabel lbImagen = new JLabel();
-        frame.add(new JScrollPane(lbImagen));
-        frame.setSize(500, 500);
-        frame.setVisible(true);
+        add(new JScrollPane(lbImagen));
+        setVisible(true);
 
         try (ServerSocket serverSocket = new ServerSocket(8000)) {
             System.out.println("Server is listening on port 8000");
@@ -23,11 +24,17 @@ public class ImagenServidor extends JFrame{
                 Socket socket = serverSocket.accept();
                 new Thread(() -> {
                     try (InputStream inputStream = socket.getInputStream()) {
-                        BufferedImage Imagen = ImageIO.read(inputStream);
-                        if (Imagen != null) {
-                            ImageIcon imageIcon = new ImageIcon(Imagen);
-                            lbImagen.setIcon(imageIcon);
-                            frame.pack(); // Adjust the frame size to fit the new image
+                        DataInputStream dis = new DataInputStream(inputStream);
+                        int length = dis.readInt();
+                        if (length > 0) {
+                            byte[] imageBytes = new byte[length];
+                            dis.readFully(imageBytes);
+                            ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes);
+                            BufferedImage image = ImageIO.read(bais);
+                            if (image != null) {
+                                lbImagen.setIcon(new ImageIcon(image));
+                                pack(); // Adjust the frame size to fit the new image
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -38,4 +45,9 @@ public class ImagenServidor extends JFrame{
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        new ImagenServidor();
+    }
 }
+

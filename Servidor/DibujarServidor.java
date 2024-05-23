@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class DibujarServidor {
+public class DibujarServidor extends JFrame{
     private static Set<PrintWriter> clientWriters = new HashSet<>();
     private static JFrame frame;
     private static DibujoArea AreaDibujo;

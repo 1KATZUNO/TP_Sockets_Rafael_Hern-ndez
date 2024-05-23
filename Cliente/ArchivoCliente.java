@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-public class ArchivoCliente {
+public class ArchivoCliente extends JFrame{
     public static void main(String[] args) {
         JFrame frame = new JFrame("Transferencia de Archivos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

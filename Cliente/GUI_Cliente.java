@@ -158,32 +158,32 @@ initComponents();
     } 
     private void btnAudiosActionPerformed(java.awt.event.ActionEvent evt) {  
         JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-        ChatCliente chat = new ChatCliente();
-        chat.setVisible(true);
+        AudioCliente audio = new AudioCliente();
+        audio.setVisible(true);
         dispose();
     } 
     private void btnImagenesActionPerformed(java.awt.event.ActionEvent evt) {  
         JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-        ChatCliente chat = new ChatCliente();
-        chat.setVisible(true);
+        ImagenCliente imagen = new ImagenCliente();
+        imagen.setVisible(true);
         dispose();
     } 
     private void btnJuegosActionPerformed(java.awt.event.ActionEvent evt) {  
         JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-        ChatCliente chat = new ChatCliente();
-        chat.setVisible(true);
+        JuegoCliente juego = new JuegoCliente();
+        juego.setVisible(true);
         dispose();
     } 
     private void btnDibujarActionPerformed(java.awt.event.ActionEvent evt) {  
         JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-        ChatCliente chat = new ChatCliente();
-        chat.setVisible(true);
+        DibujarCliente dibujo = new DibujarCliente();
+        dibujo.setVisible(true);
         dispose();
     } 
     private void btnArchivosActionPerformed(java.awt.event.ActionEvent evt) {  
         JOptionPane.showMessageDialog(null, "Recuerda abrir El chat servidor antes");                                          
-        ChatCliente chat = new ChatCliente();
-        chat.setVisible(true);
+        ArchivoCliente archivo = new ArchivoCliente();
+        archivo.setVisible(true);
         dispose();
     } 
 

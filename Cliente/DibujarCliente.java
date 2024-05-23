@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-public class DibujarCliente {
+public class DibujarCliente extends JFrame {
     private static PrintWriter out;
     private static DibujoArea AreaDibujo;
 

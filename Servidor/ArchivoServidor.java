@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-public class ArchivoServidor {
+public class ArchivoServidor extends JFrame{
     public static void main(String[] args) {
         JFrame frame = new JFrame("File Transfer Server");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
