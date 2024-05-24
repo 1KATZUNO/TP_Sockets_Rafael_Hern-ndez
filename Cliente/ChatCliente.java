@@ -1,7 +1,5 @@
 package Cliente;
 
-
-
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -25,9 +23,10 @@ public class ChatCliente extends JFrame {
         JButton btnRegresar = new JButton("Regresar");
         btnRegresar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                // Vuelve al menú principal del cliente
                 GUI_Cliente g = new GUI_Cliente();
                 g.setVisible(true);
-                dispose();
+                dispose(); // Cierra la ventana actual
             }
         });
         JPanel panelBtnRegresar = new JPanel();
@@ -43,7 +42,7 @@ public class ChatCliente extends JFrame {
         JButton btnEnviar = new JButton("Enviar");
         btnEnviar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                sendMessage();
+                sendMessage(); // Envia el mensaje al servidor cuando se hace clic en el botón "Enviar"
             }
         });
 
@@ -52,26 +51,28 @@ public class ChatCliente extends JFrame {
         panelEnviar.add(btnEnviar);
         add(panelEnviar, BorderLayout.SOUTH); // Ajusta el panel de enviar al fondo
 
-        new ClientThread().start();
+        new ClientThread().start(); // Inicia un hilo para manejar la comunicación con el servidor
     }
 
     private void sendMessage() {
+        // Método para enviar mensajes al servidor
         String message = "Cliente: " + txtEnviar.getText();
-        txtChat.append(message + "\n");
-        out.println(message);
-        txtEnviar.setText("");
+        txtChat.append(message + "\n"); // Muestra el mensaje en el área de chat del cliente
+        out.println(message); // Envía el mensaje al servidor
+        txtEnviar.setText(""); // Limpia el campo de texto después de enviar el mensaje
     }
 
     private class ClientThread extends Thread {
         public void run() {
             try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+                // Configura la entrada y salida de datos del socket
                 out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 String message;
                 while ((message = in.readLine()) != null) {
-                    if (!message.startsWith("Cliente:")) { // Evita la duplicación
-                        txtChat.append(message + "\n");
+                    if (!message.startsWith("Cliente:")) { // Evita la duplicación de mensajes propios
+                        txtChat.append(message + "\n"); // Muestra los mensajes recibidos del servidor en el área de chat del cliente
                     }
                 }
             } catch (IOException e) {
@@ -81,6 +82,7 @@ public class ChatCliente extends JFrame {
     }
 
     public static void main(String[] args) {
+        // Método principal, crea y muestra la ventana del cliente
         SwingUtilities.invokeLater(() -> {
             ChatCliente client = new ChatCliente();
             client.setVisible(true);

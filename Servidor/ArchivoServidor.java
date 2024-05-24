@@ -95,7 +95,7 @@ public class ArchivoServidor extends JFrame {
     }
 
     private void handleFile(File file) {
-        try (Socket socket = new Socket("localhost", 9000);
+        try (Socket socket = new Socket("localhost", 12350);
              OutputStream outputStream = socket.getOutputStream();
              FileInputStream fileInputStream = new FileInputStream(file)) {
             byte[] buffer = new byte[8192];

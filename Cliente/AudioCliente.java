@@ -20,10 +20,12 @@ public class AudioCliente extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Creación de botones
         JButton recordButton = new JButton("Grabar");
         JButton stopButton = new JButton("Detener");
         JButton regresarButton = new JButton("Regresar");
 
+        // Acción al hacer clic en el botón de grabar
         recordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -31,33 +33,38 @@ public class AudioCliente extends JFrame {
             }
         });
 
+        // Acción al hacer clic en el botón de detener
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PararGrabar();
-                EnvioAudio("localhost", 12346); // Acordarse de poner otros puerts
+                EnvioAudio("localhost", 12346); // Debes recordar cambiar el puerto si es necesario
             }
         });
 
+        // Acción al hacer clic en el botón de regresar
         regresarButton.addActionListener(e -> {
             GUI_Cliente g = new GUI_Cliente();
-         g.setVisible(true);
-         dispose();
+            g.setVisible(true);
+            dispose(); // Cierra la ventana actual
         });
 
+        // Configuración del panel
         JPanel panel = new JPanel();
         panel.add(recordButton);
         panel.add(stopButton);
         panel.add(regresarButton);
-        add(panel);
+        add(panel); // Añade el panel a la ventana
 
-        setVisible(true);
+        setVisible(true); // Hace visible la ventana
     }
 
+    // Método para iniciar la grabación de audio
     private void EmpezarGrabar() {
         Grabador = true;
         new Thread(() -> {
             try {
+                // Configuración del formato de audio
                 AudioFormat format = new AudioFormat(44100, 16, 2, true, true);
                 DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
                 TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info);
@@ -66,6 +73,7 @@ public class AudioCliente extends JFrame {
 
                 out = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
+                // Bucle para grabar audio mientras el botón de detener no se haya presionado
                 while (Grabador) {
                     int count = line.read(buffer, 0, buffer.length);
                     if (count > 0) {
@@ -80,21 +88,24 @@ public class AudioCliente extends JFrame {
         }).start();
     }
 
+    // Método para detener la grabación de audio
     private void PararGrabar() {
         Grabador = false;
     }
 
+    // Método para enviar audio al servidor
     private void EnvioAudio(String SERVER_ADDRESS, int SERVER_PORT) {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
              ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
-            oos.writeObject(out.toByteArray());
+            oos.writeObject(out.toByteArray()); // Envía los datos de audio al servidor
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // Método principal
     public static void main(String[] args) {
+        // Inicia la aplicación
         SwingUtilities.invokeLater(AudioCliente::new);
     }
 }
-

@@ -17,34 +17,29 @@ public class ChatServidor extends JFrame {
     public ChatServidor() {
         setTitle("Servidor de Chat");
         setSize(500, 400);
-         // Ajustamos  el tamaño de la ventana, de comos e va a ver
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); 
-        // Centra la ventana en la pantalla
+        setLocationRelativeTo(null); // Centra la ventana en la pantalla
 
-        //botón de regresar a menú principal
+        // Botón de regresar a menú principal
         JButton btnRegresar = new JButton("Regresar");
         btnRegresar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
-            GUI_Servidor g = new GUI_Servidor();
-            g.setVisible(true);
-            dispose();
+                GUI_Servidor g = new GUI_Servidor();
+                g.setVisible(true);
+                dispose();
             }
         });
         JPanel panelBtnRegresar = new JPanel();
         panelBtnRegresar.add(btnRegresar);
-        add(panelBtnRegresar, BorderLayout.NORTH); 
-// Colocamos el botón en la parte superior de la ventana por algún dedaso
+        add(panelBtnRegresar, BorderLayout.NORTH); // Coloca el botón en la parte superior de la ventana
 
         txtChat = new JTextArea();
         txtChat.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(txtChat);
-        add(scrollPane, BorderLayout.CENTER); 
-        // Ajustamos el panel de chat al centro
+        add(scrollPane, BorderLayout.CENTER); // Ajusta el panel de chat al centro
 
-        txtEnviar = new JTextField(30); 
-        // campo de texto y su tamaaño
+        txtEnviar = new JTextField(30); // Campo de texto y su tamaño
         JButton btnEnviar = new JButton("Enviar");
         btnEnviar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -57,11 +52,11 @@ public class ChatServidor extends JFrame {
         panelEnviar.add(btnEnviar);
         add(panelEnviar, BorderLayout.SOUTH); // Ajusta el panel de enviar al fondo
 
-        new ServidorHilo().start();
+        new ServidorHilo().start(); // Inicia un hilo para manejar las conexiones de clientes
     }
 
     private void EnviarMensaje() {
-        // acá enviamos el mensaje del servidor al cliente, y así será como le aparece 
+        // Método para enviar mensajes del servidor a los clientes
         String message = "Servidor: " + txtEnviar.getText();
         txtChat.append(message + "\n");
         synchronized (EscritorCliente) {
@@ -69,15 +64,15 @@ public class ChatServidor extends JFrame {
                 writer.println(message);
             }
         }
-        txtEnviar.setText("");
+        txtEnviar.setText(""); // Limpia el campo de texto después de enviar el mensaje
     }
 
     private class ServidorHilo extends Thread {
-        // aquí un hilito para el envío
         public void run() {
+            // Hilo para manejar las conexiones entrantes de los clientes
             try (ServerSocket serverSocket = new ServerSocket(PUERTO)) {
                 while (true) {
-                    new ManejadorCliente(serverSocket.accept()).start();
+                    new ManejadorCliente(serverSocket.accept()).start(); // Acepta nuevas conexiones y las maneja en hilos separados
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -86,8 +81,6 @@ public class ChatServidor extends JFrame {
     }
 
     private class ManejadorCliente extends Thread {
-        //El manejador del cliente se sienta en el lado del servidor y maneja la comunicación entre el servidor y los clientes
-        // es como una centralita
         private Socket socket;
         private PrintWriter out;
         private BufferedReader in;
@@ -97,20 +90,19 @@ public class ChatServidor extends JFrame {
         }
 
         public void run() {
-            // cmo corre
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream(), true);
                 synchronized (EscritorCliente) {
-                    EscritorCliente.add(out);
+                    EscritorCliente.add(out); // Agrega el escritor del cliente al conjunto de escritores
                 }
 
                 String message;
                 while ((message = in.readLine()) != null) {
-                    txtChat.append(message + "\n");
+                    txtChat.append(message + "\n"); // Muestra el mensaje en el área de chat del servidor
                     synchronized (EscritorCliente) {
                         for (PrintWriter writer : EscritorCliente) {
-                            writer.println(message);
+                            writer.println(message); // Envía el mensaje a todos los clientes conectados
                         }
                     }
                 }
@@ -118,12 +110,12 @@ public class ChatServidor extends JFrame {
                 e.printStackTrace();
             } finally {
                 try {
-                    socket.close();
+                    socket.close(); // Cierra el socket del cliente
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 synchronized (EscritorCliente) {
-                    EscritorCliente.remove(out);
+                    EscritorCliente.remove(out); // Elimina el escritor del cliente del conjunto de escritores
                 }
             }
         }
@@ -133,7 +125,6 @@ public class ChatServidor extends JFrame {
         SwingUtilities.invokeLater(() -> {
             ChatServidor server = new ChatServidor();
             server.setVisible(true);
-            
         });
     }
 }

@@ -14,39 +14,44 @@ public class DibujarServidor extends JFrame {
     public DibujarServidor() {
         setTitle("Dibujo Servidor");
         AreaDibujo = new DibujoArea();
-        add(AreaDibujo, BorderLayout.CENTER);
-        setLocationRelativeTo(null);
+        add(AreaDibujo, BorderLayout.CENTER); // Agrega el área de dibujo al centro del marco
+        setLocationRelativeTo(null); // Centra el marco en la pantalla
 
+        // Panel para botones
         JPanel panel = new JPanel();
+
+        // Botón para borrar todo el dibujo
         JButton clearButton = new JButton("Borrar Todo");
         clearButton.addActionListener(e -> {
-            AreaDibujo.Limpiar();
-            broadcast("BORRAR");
+            AreaDibujo.Limpiar(); // Llama al método para limpiar el dibujo
+            broadcast("BORRAR"); // Envia el comando de borrar a todos los clientes
         });
         panel.add(clearButton);
 
+        // Botón para regresar al menú principal del servidor
         JButton regresarButton = new JButton("Regresar");
         regresarButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
             GUI_Servidor g = new GUI_Servidor();
             g.setVisible(true);
-            dispose();
+            dispose(); // Cierra el marco actual
         });
         panel.add(regresarButton);
 
-        add(panel, BorderLayout.SOUTH);
+        add(panel, BorderLayout.SOUTH); // Agrega el panel de botones en la parte inferior del marco
 
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+        setSize(800, 600); // Establece el tamaño del marco
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Finaliza el programa cuando se cierra el marco
+        setVisible(true); // Hace visible el marco
 
+        // Inicia un hilo para manejar las conexiones de los clientes
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(12349)) {
                 System.out.println("Servidor escuchando en puerto 12349");
 
                 while (true) {
-                    Socket socket = serverSocket.accept();
-                    new Thread(new ManejadorCliente(socket)).start();
+                    Socket socket = serverSocket.accept(); // Acepta nuevas conexiones de clientes
+                    new Thread(new ManejadorCliente(socket)).start(); // Inicia un hilo para manejar cada cliente
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -54,6 +59,7 @@ public class DibujarServidor extends JFrame {
         }).start();
     }
 
+    // Método para enviar un mensaje a todos los clientes conectados
     private void broadcast(String mensaje) {
         synchronized (clientWriters) {
             for (PrintWriter writer : clientWriters) {
@@ -62,6 +68,7 @@ public class DibujarServidor extends JFrame {
         }
     }
 
+    // Clase interna para manejar cada conexión de cliente en un hilo separado
     private class ManejadorCliente implements Runnable {
         private Socket socket;
         private PrintWriter out;
@@ -78,32 +85,33 @@ public class DibujarServidor extends JFrame {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 synchronized (clientWriters) {
-                    clientWriters.add(out);
+                    clientWriters.add(out); // Agrega el escritor del cliente al conjunto de escritores
                 }
 
                 String mensaje;
                 while ((mensaje = in.readLine()) != null) {
                     if (mensaje.equals("BORRAR")) {
-                        AreaDibujo.Limpiar();
+                        AreaDibujo.Limpiar(); // Llama al método para limpiar el dibujo en todos los clientes
                     } else {
-                        broadcast(mensaje);
-                        procesarMensaje(mensaje);
+                        broadcast(mensaje); // Envia el mensaje a todos los clientes conectados
+                        procesarMensaje(mensaje); // Procesa el mensaje para dibujar en el área de dibujo
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 try {
-                    socket.close();
+                    socket.close(); // Cierra el socket del cliente
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 synchronized (clientWriters) {
-                    clientWriters.remove(out);
+                    clientWriters.remove(out); // Elimina el escritor del cliente del conjunto de escritores
                 }
             }
         }
 
+        // Método para procesar un mensaje y dibujar en el área de dibujo
         private void procesarMensaje(String mensaje) {
             String[] parts = mensaje.split(",");
             int x = Integer.parseInt(parts[0]);
@@ -111,10 +119,11 @@ public class DibujarServidor extends JFrame {
             int x2 = Integer.parseInt(parts[2]);
             int y2 = Integer.parseInt(parts[3]);
             Color color = new Color(Integer.parseInt(parts[4]));
-            AreaDibujo.LineaDibujo(x, y, x2, y2, color);
+            AreaDibujo.LineaDibujo(x, y, x2, y2, color); // Dibuja la línea en el área de dibujo
         }
     }
 
+    // Clase interna que representa el área de dibujo personalizada
     private class DibujoArea extends JPanel {
         private int x, y;
 
@@ -134,15 +143,16 @@ public class DibujarServidor extends JFrame {
                 public void mouseDragged(MouseEvent e) {
                     int x2 = e.getX();
                     int y2 = e.getY();
-                    LineaDibujo(x, y, x2, y2, Color.RED);
+                    LineaDibujo(x, y, x2, y2, Color.RED); // Dibuja la línea en el área de dibujo
                     String message = x + "," + y + "," + x2 + "," + y2 + "," + Color.RED.getRGB();
-                    broadcast(message);
+                    broadcast(message); // Envia el mensaje a todos los clientes conectados
                     x = x2;
                     y = y2;
                 }
             });
         }
 
+        // Método para dibujar una línea en el área de dibujo
         public void LineaDibujo(int x, int y, int x2, int y2, Color color) {
             Graphics g = getGraphics();
             g.setColor(color);
@@ -150,6 +160,7 @@ public class DibujarServidor extends JFrame {
             g.dispose();
         }
 
+        // Método para limpiar el dibujo en el área de dibujo
         public void Limpiar() {
             repaint();
         }
@@ -161,8 +172,7 @@ public class DibujarServidor extends JFrame {
     }
 
     public static void main(String[] args) {
+        // Método principal, crea y muestra el marco del servidor de dibujo
         SwingUtilities.invokeLater(DibujarServidor::new);
     }
 }
-
-

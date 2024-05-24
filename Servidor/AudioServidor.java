@@ -16,40 +16,49 @@ public class AudioServidor extends JFrame {
     private byte[] RecibirAudioData;
 
     public AudioServidor() {
+        // Configuración de la ventana
         setTitle("Servidor de Audio");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Creación de botones
         BotonPlay = new JButton("Reproducir");
         BotonPlay.setEnabled(false);
 
+        // Acción al hacer clic en el botón de reproducir
         BotonPlay.addActionListener(e -> {
             if (AudioRecibir) {
-                playAudio();
+                playAudio(); // Llama al método para reproducir el audio
             }
         });
 
+        // Botón para regresar
         BotonRegresar = new JButton("Regresar");
         BotonRegresar.addActionListener(e -> {
+            // Mensaje al intentar regresar
             JOptionPane.showMessageDialog(null, "Recuerda salir antes con Cliente");
+            // Vuelve a la interfaz de servidor
             GUI_Servidor g = new GUI_Servidor();
             g.setVisible(true);
-            dispose();
+            dispose(); // Cierra la ventana actual
         });
 
+        // Configuración del panel
         JPanel panel = new JPanel();
         panel.add(BotonPlay);
         panel.add(BotonRegresar);
-        add(panel);
+        add(panel); // Añade el panel a la ventana
 
-        setVisible(true);
+        setVisible(true); // Hace visible la ventana
 
+        // Hilo para recibir audio del cliente
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(12346)) {
                 while (true) {
                     try (Socket socket = serverSocket.accept();
                          ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+                        // Lee el audio recibido y habilita el botón de reproducir
                         RecibirAudioData = (byte[]) ois.readObject();
                         AudioRecibir = true;
                         BotonPlay.setEnabled(true);
@@ -60,11 +69,13 @@ public class AudioServidor extends JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }).start();
+        }).start(); // Inicia el hilo para la recepción de audio
     }
 
+    // Método para reproducir el audio recibido
     private void playAudio() {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(RecibirAudioData)) {
+            // Configuración del formato de audio
             AudioFormat format = new AudioFormat(44100, 16, 2, true, true);
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info);
@@ -74,7 +85,7 @@ public class AudioServidor extends JFrame {
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = bais.read(buffer)) != -1) {
-                line.write(buffer, 0, bytesRead);
+                line.write(buffer, 0, bytesRead); // Reproduce el audio
             }
 
             line.drain();
@@ -84,7 +95,9 @@ public class AudioServidor extends JFrame {
         }
     }
 
+    // Método principal
     public static void main(String[] args) {
+        // Inicia la aplicación
         SwingUtilities.invokeLater(AudioServidor::new);
     }
 }
