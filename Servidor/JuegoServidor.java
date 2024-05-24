@@ -1,13 +1,14 @@
 package Servidor;
 
 import javax.swing.*;
+
+import Cliente.GUI_Cliente;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class JuegoServidor extends JFrame {
     private JButton[][] Botones = new JButton[3][3];
@@ -23,14 +24,13 @@ public class JuegoServidor extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Muestra la ventana del servidor y cierra la actual
+              JOptionPane.showMessageDialog(null, "Recuerda cerrar antes el Cliente");
                 GUI_Servidor g = new GUI_Servidor();
                 g.setVisible(true);
                 dispose();
             }
         });
         setLayout(new GridLayout(3, 3));
-        setLocationRelativeTo(null);
 
         try {
             ServerSocket serverSocket = new ServerSocket(12348);

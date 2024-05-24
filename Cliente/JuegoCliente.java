@@ -1,15 +1,10 @@
 package Cliente;
 
 import javax.swing.*;
-
-import Servidor.GUI_Servidor;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class JuegoCliente extends JFrame {
     private JButton[][] Botones = new JButton[3][3];
@@ -20,7 +15,7 @@ public class JuegoCliente extends JFrame {
 
     public JuegoCliente() {
         setTitle("Tic Tac Toe - Client");
-         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // Cambio en la operación de cierre
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // Cambio en la operación de cierre
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -31,7 +26,6 @@ public class JuegoCliente extends JFrame {
             }
         });
         setLayout(new GridLayout(3, 3));
-        setLocationRelativeTo(null);
 
         try {
             Socket socket = new Socket("localhost", 12348);
@@ -138,4 +132,3 @@ public class JuegoCliente extends JFrame {
         SwingUtilities.invokeLater(JuegoCliente::new);
     }
 }
-
